@@ -2,7 +2,11 @@
 
 params.input = ""
 
-params.output = ""
+params.output = "/home/belmann/projects/multi-frhit"
+
+outputDir = file(params.output)
+
+params.logFile = params.output + "/sra_download_log.txt"
 
 logFile = file(params.logFile)
 
@@ -39,12 +43,11 @@ process fetchSRA {
     val id  into fastqIds
 
     """
-     ${params.SRA_TOOLKIT_DIR}/fastq-dump --readids --gzip --minReadLen ${params.READ_LENGTH} --split-files  ${id} -O ${params.output}
+     ${params.SRA_TOOLKIT_DIR}/fastq-dump --readids --gzip --minReadLen ${params.READ_LENGTH} --split-files  ${id} -O ${outputDir}
     """
 }
 
 fastqIds = fastqIds.tap(log1)
-
 
 process seqPurge {
 
@@ -67,7 +70,7 @@ process seqPurge {
     val fileId into result
 
     """
-     ${params.SEQPURGE} -in1 '${params.output}/${fileId}_1.fastq.gz' -in2 '${params.output}/${fileId}_2.fastq.gz' -out1 '${params.output}/${fileId}_1.seqpurge.fastq.gz' -out2 '${params.output}/${fileId}_2.seqpurge.fastq.gz' -out3 '${params.output}/${fileId}_3.seqpurge.fastq.gz' 
+     ${params.SEQPURGE} -in1 '${outputDir}/${fileId}_1.fastq.gz' -in2 '${outputDir}/${fileId}_2.fastq.gz' -out1 '${outputDir}/${fileId}_1.seqpurge.fastq.gz' -out2 '${outputDir}/${fileId}_2.seqpurge.fastq.gz' -out3 '${outputDir}/${fileId}_3.seqpurge.fastq.gz' 
     """
 }
 
