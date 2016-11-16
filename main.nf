@@ -2,7 +2,7 @@
 
 params.input = ""
 
-params.output = "/home/belmann/projects/multi-frhit"
+params.output = ""
 
 outputDir = file(params.output)
 
