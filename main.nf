@@ -6,15 +6,7 @@ params.output = ""
 
 outputDir = file(params.output)
 
-params.logFile = params.output + "/sra_download_log.txt"
-
-logFile = file(params.logFile)
-
 sraIds = Channel.create()
-
-log1 = Channel.create().subscribe { logFile << "fastq-dump for $it finished \n" }
-
-log2 = Channel.create().subscribe { logFile << "seqPurge for $it finished \n" }
 
 Channel
     .from(file(params.input))
@@ -30,10 +22,6 @@ process fetchSRA {
 
     maxErrors 50000
 
-    cpus 1
-
-    memory '2 GB'
-
     tag { id + '_fastq_dump'}
 
     input:
@@ -47,8 +35,6 @@ process fetchSRA {
     """
 }
 
-fastqIds = fastqIds.tap(log1)
-
 process seqPurge {
 
     errorStrategy 'retry'
@@ -58,8 +44,6 @@ process seqPurge {
     maxErrors 50000
 
     cpus 1
-
-    memory '2 GB'
 
     tag { fileId + '_seqPurge' }
 
@@ -73,5 +57,3 @@ process seqPurge {
      ${params.SEQPURGE} -in1 '${outputDir}/${fileId}_1.fastq.gz' -in2 '${outputDir}/${fileId}_2.fastq.gz' -out1 '${outputDir}/${fileId}_1.seqpurge.fastq.gz' -out2 '${outputDir}/${fileId}_2.seqpurge.fastq.gz' -out3 '${outputDir}/${fileId}_3.seqpurge.fastq.gz' 
     """
 }
-
-result = result.tap(log2)
