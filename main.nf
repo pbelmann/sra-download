@@ -43,7 +43,9 @@ process filter {
 }
    
 filteredSraIds = Channel.create()
-testedSraIds.filter({!it.equals("not_found")}).into(filteredSraIds)
+testedSraIds
+   .filter({!it.equals("not_found")})
+   .into(filteredSraIds)
 
 process fetchSRA {
 
@@ -66,6 +68,11 @@ process fetchSRA {
     """
 }
 
+existingFastqIds = Channel.create()
+filteredSraIds
+   .filter(file(outputDir + "/" + it + "_*.fastq.gz").size() != 2)
+   .into(existingFastqSraIds)
+
 process seqPurge {
 
     errorStrategy 'retry'
@@ -79,7 +86,7 @@ process seqPurge {
     tag { fileId + '_seqPurge' }
 
     input:
-    val fileId from fastqIds
+    val fileId from existingFastqSraIds
 
     output:
     val fileId into result
