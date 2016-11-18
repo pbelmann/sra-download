@@ -68,9 +68,9 @@ process fetchSRA {
     """
 }
 
-existingFastqIds = Channel.create()
-filteredSraIds
-   .filter(file(outputDir + "/" + it + "_*.fastq.gz").size() != 2)
+existingFastqSraIds = Channel.create()
+fastqIds
+   .filter({file(outputDir + "/" + it + "_*.fastq.gz").size() != 2})
    .into(existingFastqSraIds)
 
 process seqPurge {
