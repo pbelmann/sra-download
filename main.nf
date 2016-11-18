@@ -70,7 +70,7 @@ process fetchSRA {
 
 existingFastqSraIds = Channel.create()
 fastqIds
-   .filter({file(outputDir + "/" + it + "*.fastq.gz").size() != 2})
+   .filter({file(outputDir + "/" + it + "_[1-3].fastq.gz").size() != 2})
    .into(existingFastqSraIds)
 
 process seqPurge {
@@ -92,6 +92,6 @@ process seqPurge {
     val fileId into result
 
     """
-     ${params.SEQPURGE} -in1 '${outputDir}/${fileId}_1.fastq.gz' -in2 '${outputDir}/${fileId}_2.fastq.gz' -out1 '${outputDir}/${fileId}_1.fastq.seqpurge.gz' -out2 '${outputDir}/${fileId}_2.fastq.seqpurge.gz' -out3 '${outputDir}/${fileId}_3.fastq.seqpurge.gz' 
+     ${params.SEQPURGE} -in1 '${outputDir}/${fileId}_1.fastq.gz' -in2 '${outputDir}/${fileId}_2.fastq.gz' -out1 '${outputDir}/${fileId}_1.seqpurge' -out2 '${outputDir}/${fileId}_2.seqpurge' -out3 '${outputDir}/${fileId}_3.seqpurge' 
     """
 }
