@@ -22,7 +22,7 @@ process filter {
 
     maxErrors 50000
 
-    tag { id + '_fastq_dump'}
+    tag { id + '_filter'}
 
     input:
     val id from sraIds
@@ -64,13 +64,13 @@ process fetchSRA {
     val id  into fastqIds
 
     """
-     ${params.SRA_TOOLKIT_DIR}/fastq-dump --readids --gzip --minReadLen ${params.READ_LENGTH} --split-files  ${id} -O ${outputDir}
+     ${params.SRA_TOOLKIT_DIR}/fastq-dump --readids --gzip --minReadLen ${params.READ_LENGTH} --split-3  ${id} -O ${outputDir}
     """
 }
 
 existingFastqSraIds = Channel.create()
 fastqIds
-   .filter({file(outputDir + "/" + it + "_[1-3].fastq.gz").size() != 2})
+   .filter({file(params.output + "/" + it + "_?.fastq.gz", glob: true).size() == 2})
    .into(existingFastqSraIds)
 
 process seqPurge {
@@ -92,6 +92,6 @@ process seqPurge {
     val fileId into result
 
     """
-     ${params.SEQPURGE} -in1 '${outputDir}/${fileId}_1.fastq.gz' -in2 '${outputDir}/${fileId}_2.fastq.gz' -out1 '${outputDir}/${fileId}_1.seqpurge' -out2 '${outputDir}/${fileId}_2.seqpurge' -out3 '${outputDir}/${fileId}_3.seqpurge' 
+     ${params.SEQPURGE} -in1 '${outputDir}/${fileId}_1.fastq.gz' -in2 '${outputDir}/${fileId}_2.fastq.gz' -out1 '${outputDir}/${fileId}_1.seqpurge.fastq.gz' -out2 '${outputDir}/${fileId}_2.seqpurge.fastq.gz' -out3 '${outputDir}/${fileId}_3.seqpurge' 
     """
 }
