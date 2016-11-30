@@ -95,3 +95,5 @@ process seqPurge {
      ${params.SEQPURGE} -in1 '${outputDir}/${fileId}_1.fastq.gz' -in2 '${outputDir}/${fileId}_2.fastq.gz' -out1 '${outputDir}/${fileId}_1.seqpurge.fastq.gz' -out2 '${outputDir}/${fileId}_2.seqpurge.fastq.gz' -out3 '${outputDir}/${fileId}_3.seqpurge' 
     """
 }
+
+result.subscribe { String fileId ->  file(fileId + "_?.fastq.gz").delete }
