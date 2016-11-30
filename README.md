@@ -9,7 +9,7 @@ This pipeline downloads SRA files from NCBI and removes adapter sequences from p
 2. Run the pipeline with the following command below, it will use [pbelmann/sra-download](https://hub.docker.com/r/pbelmann/sra-download/) docker container.
 
 ~~~BASH
-nextflow run  pbelmann/sra-download  --cache /path/to/cache --output /path/to/output --input /path/to/input.txt -with-docker -with-trace -with-timeline  pbelmann/sra-download
+nextflow run  pbelmann/sra-download  --cache /path/to/cache --output /path/to/output --input /path/to/input.txt -with-trace -with-timeline -with-docker pbelmann/sra-download
 ~~~
 
    where:
