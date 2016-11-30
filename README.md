@@ -2,7 +2,7 @@
 
 This pipeline downloads SRA files from NCBI and removes adapter sequences from paired end data using [seqpurge](https://www.ncbi.nlm.nih.gov/pubmed/27161244).
 
-# How to use the pipeline:
+# How to use
 
 1. Install Nextflow https://www.nextflow.io/docs/latest/getstarted.html#installation
 
